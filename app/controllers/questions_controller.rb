@@ -5,18 +5,15 @@ class QuestionsController < ApplicationController
     #@second_actor = Actor.second
     
     
-    @the_actor = Actor.second.id
-    @roles_for_second_actor = Role.where(:actor_id => @the_actor)
-    @most_recent_movie_for_second_actor = @roles_for_second_actor.movie.order("year DESC").first.title
+    @most_recent_movie_for_second_actor = Actor.second.movies.order("year DESC").first.title
     
-    #@actor.roles.each do |role|
-      #role.movie.title 
+
   end
 
   def question_2
     # Who directed the longest movie on the list?
 
-    @director_of_longest_movie = Movie.sort("duration DESC").first.director_id
+    @director_of_longest_movie = Movie.order("duration DESC").first.director.name
     
   end
 
@@ -36,7 +33,15 @@ class QuestionsController < ApplicationController
     # Which actor has been in the most movies on the list?
     # (If there's a tie, any one of them is fine)
 
-    # I want to start with actors and their roles. So from the role table, can I put into the actor key the count of their roles, then order the keys or values?
+    the_leader = Actor.new
+
+     Actor.all.each do |the_actor|
+       if the_actor.movies.count > the_leader.movies.count
+         the_leader = the_actor
+        end
+      end
+ 
+      @actor_with_the_most_movies = the_leader
 
     
 
